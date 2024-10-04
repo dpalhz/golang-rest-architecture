@@ -3,13 +3,14 @@ package server
 import (
 	"github.com/gofiber/fiber/v2"
 
-	"simulation/internal/database"
+	"simulation/internal/config"
 )
 
 type FiberServer struct {
 	*fiber.App
 
-	db database.Service
+	db config.Gorm
+	redis config.RedisClient
 }
 
 func New() *FiberServer {
@@ -19,7 +20,8 @@ func New() *FiberServer {
 			AppName:      "simulation",
 		}),
 
-		db: database.New(),
+		db: config.NewGorm(),
+		redis: *config.NewRedisClient(),
 	}
 
 	return server

@@ -1,22 +1,24 @@
-package database
+package config
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
+	"simulation/internal/entity"
 	"strconv"
 	"time"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
-	_ "github.com/joho/godotenv/autoload"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
-// Service represents a service that interacts with a database.
-type Service interface {
+// Gorm represents a struct that interacts with a database using GORM.
+type Gorm interface {
 	// Health returns a map of health status information.
 	// The keys and values in the map are service-specific.
+	GetDB() *gorm.DB
 	Health() map[string]string
 
 	// Close terminates the database connection.
@@ -24,8 +26,8 @@ type Service interface {
 	Close() error
 }
 
-type service struct {
-	db *sql.DB
+type gormInstance struct {
+	db *gorm.DB
 }
 
 var (
@@ -35,39 +37,63 @@ var (
 	port       = os.Getenv("DB_PORT")
 	host       = os.Getenv("DB_HOST")
 	schema     = os.Getenv("DB_SCHEMA")
-	dbInstance *service
+	dbInstance *gormInstance
 )
 
-func New() Service {
+// NewGorm creates a new Gorm instance with a GORM connection.
+// It reuses the connection if it's already established.
+func NewGorm() Gorm {
 	// Reuse Connection
 	if dbInstance != nil {
 		return dbInstance
 	}
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", username, password, host, port, database, schema)
-	db, err := sql.Open("pgx", connStr)
+
+	connStr := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable search_path=%s",
+		host, username, password, database, port, schema)
+
+	// GORM with PostgreSQL driver
+	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info), // Adjust log level as needed
+	})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("failed to connect database:", err)
 	}
-	dbInstance = &service{
+
+	// **Perform migration for your entities**
+    err = db.AutoMigrate(&entity.User{})  // Migrasi tabel User
+    if err != nil {
+        log.Fatalf("failed to migrate User entity: %v", err)
+    }
+
+	dbInstance = &gormInstance{
 		db: db,
 	}
+
 	return dbInstance
 }
 
 // Health checks the health of the database connection by pinging the database.
 // It returns a map with keys indicating various health statistics.
-func (s *service) Health() map[string]string {
+func (g *gormInstance) Health() map[string]string {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	stats := make(map[string]string)
 
 	// Ping the database
-	err := s.db.PingContext(ctx)
+	sqlDB, err := g.db.DB()
+	if err != nil {
+		stats["status"] = "down"
+		stats["error"] = fmt.Sprintf("failed to get database object: %v", err)
+		log.Fatalf("failed to get database object: %v", err)
+		return stats
+	}
+
+	err = sqlDB.PingContext(ctx)
 	if err != nil {
 		stats["status"] = "down"
 		stats["error"] = fmt.Sprintf("db down: %v", err)
-		log.Fatalf(fmt.Sprintf("db down: %v", err)) // Log the error and terminate the program
+		log.Fatalf("db down: %v", err)
 		return stats
 	}
 
@@ -76,7 +102,7 @@ func (s *service) Health() map[string]string {
 	stats["message"] = "It's healthy"
 
 	// Get database stats (like open connections, in use, idle, etc.)
-	dbStats := s.db.Stats()
+	dbStats := sqlDB.Stats()
 	stats["open_connections"] = strconv.Itoa(dbStats.OpenConnections)
 	stats["in_use"] = strconv.Itoa(dbStats.InUse)
 	stats["idle"] = strconv.Itoa(dbStats.Idle)
@@ -109,7 +135,16 @@ func (s *service) Health() map[string]string {
 // It logs a message indicating the disconnection from the specific database.
 // If the connection is successfully closed, it returns nil.
 // If an error occurs while closing the connection, it returns the error.
-func (s *service) Close() error {
+func (g *gormInstance) Close() error {
+	sqlDB, err := g.db.DB()
+	if err != nil {
+		return fmt.Errorf("failed to get database object: %v", err)
+	}
 	log.Printf("Disconnected from database: %s", database)
-	return s.db.Close()
+	return sqlDB.Close()
+}
+
+// GetDB returns the underlying *gorm.DB object.
+func (g *gormInstance) GetDB() *gorm.DB {
+	return g.db
 }
