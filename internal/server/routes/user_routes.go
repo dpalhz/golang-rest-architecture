@@ -1,4 +1,3 @@
-// server/routes/user_routes.go
 package routes
 
 import (
@@ -9,8 +8,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
-
-// UserRoutes defines all user-related routes
 
 func UserRoutes(api fiber.Router, db *gorm.DB) {
 	userRepo := repository.NewUserRepository(db)

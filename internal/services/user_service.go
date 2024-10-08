@@ -105,7 +105,6 @@ func (s *UserService) DeleteUser(userID int) error {
 }
 
 func (s *UserService) GetUserProfile(userID int) (*response.UserDetails, error) {
-	// Fetch user from repository based on ID
 	user, err := s.GetUserByID(userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

@@ -36,7 +36,6 @@ func (uc *UserController) UserRegisterHandler(c *fiber.Ctx) error {
 func (uc *UserController) UserLoginHandler(c *fiber.Ctx) error {
 	dto := new(request.UserLogin)
 
-	// Parse body
 	if err := c.BodyParser(dto); err != nil {
 		return utils.CreateResponse(c, fiber.StatusBadRequest, false, "Invalid input", nil)
 	}
@@ -84,7 +83,6 @@ func (uc *UserController) UserDeleteHandler(c *fiber.Ctx) error {
 
 
 func (uc *UserController) ProfileUserHandler(c *fiber.Ctx) error {
-	// Dapatkan user ID dari parameter URL
 	userID, err := c.ParamsInt("id")
 	if err != nil || userID <= 0 {
 		return utils.CreateResponse(c, fiber.StatusBadRequest, false, "Invalid user ID", nil)

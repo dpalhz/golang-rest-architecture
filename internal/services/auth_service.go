@@ -91,7 +91,6 @@ func generateSessionID() string {
 	randomBytes := make([]byte, 8) 
 	_, err := rand.Read(randomBytes)
 	if err != nil {
-		// Handle error
 		return "error_generating_session_id"
 	}
 	sessionID := fmt.Sprintf("%x-%d", randomBytes, time.Now().UnixNano())

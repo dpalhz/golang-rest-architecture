@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/signal"
 
-	// "simulation/internal/config"
+	"simulation/internal/database/seeder"
 	"simulation/internal/server"
 	"strconv"
 	"syscall"
@@ -41,9 +41,9 @@ func main() {
 
 	server := server.New()
 
-	// if err := config.SeedDatabase(server.DB.GetDB()); err != nil {
-	// 	log.Fatalf("Failed to seed database: %v", err)
-	// }
+	if err := seeder.SeedDatabase(server.DB.GetDB()); err != nil {
+		log.Fatalf("Failed to seed database: %v", err)
+	}
 
 	server.RegisterFiberRoutes()
 	go func() {

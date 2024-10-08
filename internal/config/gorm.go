@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"simulation/internal/entity"
 	"strconv"
 	"time"
 
@@ -141,4 +142,27 @@ func (g *gormInstance) Close() error {
 // GetDB returns the underlying *gorm.DB object.
 func (g *gormInstance) GetDB() *gorm.DB {
 	return g.db
+}
+
+
+
+func MigrateEntities(db *gorm.DB) {
+    // List of entities to migrate
+    entities := []interface{}{
+        &entity.User{},
+        &entity.Admin{},
+        &entity.Blog{},
+        &entity.Category{},
+        &entity.Tag{},
+    }
+
+    // Loop through each entity and migrate it
+    for _, entity := range entities {
+        err := db.AutoMigrate(entity)
+        if err != nil {
+            log.Fatalf("failed to migrate entity %T: %v", entity, err)
+        } else {
+            log.Printf("Migrated entity %T successfully", entity)
+        }
+    }
 }

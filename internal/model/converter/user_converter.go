@@ -6,7 +6,7 @@ import (
 	"simulation/internal/model/response"
 )
 func ConvertUserToRegisterResponse(user *entity.User) *response.UserRegister {
-	return &response.UserRegister{ // Kembalikan pointer ke UserRegister
+	return &response.UserRegister{ 
 		ID:       user.ID,
 		Name:     user.Name,
 		Username: user.Username,

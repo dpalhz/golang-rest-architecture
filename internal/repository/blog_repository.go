@@ -83,7 +83,6 @@ func (r *BlogRepository) FilterBlogsByAnyCategoriesAndTags(categories []uint, ta
 func (r *BlogRepository) FilterBlogsByAllCategoriesAndTags(categories []uint, tags []uint) ([]entity.Blog, error) {
 	var blogs []entity.Blog
 
-	// Start the query
 	query := r.DB.Model(&entity.Blog{}).
 		Joins("JOIN blog_categories ON blogs.id = blog_categories.blog_id").
 		Joins("JOIN blog_tags ON blogs.id = blog_tags.blog_id").

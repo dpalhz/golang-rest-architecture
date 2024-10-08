@@ -11,7 +11,6 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-// BlogService handles the business logic for the Blog entity
 type BlogService struct {
 	BlogRepo *repository.BlogRepository
 	Validator *validator.Validate
@@ -51,7 +50,6 @@ func (s *BlogService) PaginateBlogs(dto *request.Blogs) (*response.Blogs, error)
 
 
 func (s *BlogService) CreateBlog(dto *request.CreateBlog) (*response.Blog, error) {
-	// Validate request
 	err := s.Validator.Struct(dto)
 	if err != nil {
 		return nil, err
@@ -67,7 +65,6 @@ func (s *BlogService) CreateBlog(dto *request.CreateBlog) (*response.Blog, error
 
 
 func (s *BlogService) UpdateBlog(id uint, dto *request.UpdateBlog) (*response.Blog, error) {
-	// Find existing blog
 	var blog entity.Blog
 	err := s.BlogRepo.FindById(&blog, id)
 	if err != nil {

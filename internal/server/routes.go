@@ -6,7 +6,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// RegisterFiberRoutes defines all routes for the application
 func (s *FiberServer) RegisterFiberRoutes() {
 
 	api := s.App.Group("/api/v1")

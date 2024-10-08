@@ -1,4 +1,3 @@
-// server/routes/user_routes.go
 package routes
 
 import (

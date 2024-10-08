@@ -1,4 +1,3 @@
-// server/middleware/cache.go
 package middleware
 
 import (
@@ -22,7 +21,6 @@ func (m *CacheMiddleware) Cache(c *fiber.Ctx) error {
 
     cacheKey := fmt.Sprintf("blogs:page:%s:limit:%s", page, limit)
 
-    // Check if the response is in the cache
     cachedResponse, err := m.RedisClient.Get(c.Context(), cacheKey).Result()
     if err == nil {
         fmt.Println("Cache hit: serving response from Redis")
