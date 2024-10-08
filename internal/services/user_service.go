@@ -35,7 +35,7 @@ func (s *UserService) RegisterUser(dto *request.UserRegister) (*response.UserReg
 		return nil, err 
 	}
 
-	user := converter.ConvertRequestRegisterToUser(dto)
+	user := converter.ConvertRegisterRequestToUser(dto)
 	user.Password = hashedPassword
 
 	if err := s.UserRepo.Create(user); err != nil {
@@ -70,7 +70,7 @@ func (s *UserService) GetUserByID(id int) (*entity.User, error) {
     return &user, nil
 }
 
-func (s *UserService) UpdateUser(dto *request.UserUpdate, userID int) (*response.UserUpdate, error) {
+func (s *UserService) UpdateUser(dto *request.UpdateUser, userID int) (*response.UserUpdate, error) {
 	if err := s.Validator.Struct(dto); err != nil {
 		return nil, err 
 	}

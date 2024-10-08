@@ -18,9 +18,9 @@ func UserRoutes(api fiber.Router, db *gorm.DB) {
 	userController := controller.NewUserController(userService)
 
 	userRoutes := api.Group("/user")
-	userRoutes.Get("/:id", userController.GetUserProfileHandler)  
-	userRoutes.Post("/register", userController.RegisterUserHandler)  
-	userRoutes.Post("/login", userController.LoginUserHandler)        
-	userRoutes.Put("/:id", userController.UpdateUserHandler)          
-	userRoutes.Delete("/:id", userController.DeleteUserHandler)       
+	userRoutes.Get("/:id", userController.ProfileUserHandler)  
+	userRoutes.Post("/register", userController.UserRegisterHandler)  
+	userRoutes.Post("/login", userController.UserLoginHandler)        
+	userRoutes.Put("/:id", userController.UserUpdateHandler)          
+	userRoutes.Delete("/:id", userController.UserDeleteHandler)       
 }

@@ -18,31 +18,31 @@ func NewAuthController(authService *services.AuthService) *AuthController {
 	}
 }
 
-func (ctrl *AuthController) Login(c *fiber.Ctx) error {
+func (auth *AuthController) LoginHandler(c *fiber.Ctx) error {
 	var dto request.UserLogin
 	if err := c.BodyParser(&dto); err != nil {
 		return utils.CreateResponse(c, fiber.StatusBadRequest, false, "Invalid request payload", nil)
 	}
 
-	userLoginResp, err := ctrl.AuthService.UserAuthentication(&dto)
+	userLoginResp, err := auth.AuthService.ValidateUser(&dto)
 	if err != nil {
 		return utils.CreateResponse(c, fiber.StatusUnauthorized, false, err.Error(), nil)
 	}
 
-	ctrl.AuthService.SetSessionCookie(c, userLoginResp.SessionID)
+	auth.AuthService.SetSessionCookie(c, userLoginResp.SessionID)
 
 	return utils.CreateResponse(c, fiber.StatusOK, true, "Login successful", userLoginResp)
 }
 
 
-func (ctrl *AuthController) Logout(c *fiber.Ctx) error {
+func (auth *AuthController) LogoutHandler(c *fiber.Ctx) error {
 	sessionID := c.Cookies("session_id")
 
-	if err := ctrl.AuthService.LogoutUser(sessionID); err != nil {
+	if err := auth.AuthService.LogoutUser(sessionID); err != nil {
 		return utils.CreateResponse(c, fiber.StatusInternalServerError, false, "Failed to logout", nil)
 	}
 
-	ctrl.AuthService.DeleteSessionCookie(c, sessionID)
+	auth.AuthService.DeleteSessionCookie(c, sessionID)
 
 	return utils.CreateResponse(c, fiber.StatusOK, true, "Logout successful", nil)
 }

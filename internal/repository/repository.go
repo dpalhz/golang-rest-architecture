@@ -18,7 +18,6 @@ func (r *Repository[T]) Delete(entity *T) error {
 	return r.DB.Delete(entity).Error
 }
 
-// SoftDelete marks the entity as deleted without actually removing it from the database
 func (r *Repository[T]) SoftDelete(entity *T) error {
 	return r.DB.Model(entity).Update("deleted_at", gorm.Expr("NOW()")).Error
 }
@@ -33,12 +32,10 @@ func (r *Repository[T]) FindById(entity *T, id any) error {
 	return r.DB.Where("id = ?", id).Take(entity).Error
 }
 
-// FindAll returns all entities of type T
 func (r *Repository[T]) FindAll(entities *[]T) error {
 	return r.DB.Find(entities).Error
 }
 
-// FindByField finds entities by a specific field and value
 func (r *Repository[T]) FindByField(entities *[]T, field string, value any) error {
 	return r.DB.Where(field+" = ?", value).Find(entities).Error
 }

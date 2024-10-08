@@ -14,7 +14,7 @@ func ConvertUserToRegisterResponse(user *entity.User) *response.UserRegister {
 	}
 }
 
-func ConvertRequestRegisterToUser(dto *request.UserRegister) *entity.User {
+func ConvertRegisterRequestToUser(dto *request.UserRegister) *entity.User {
 	return &entity.User{
 		Name:     dto.Name,
 		Username: dto.Username,

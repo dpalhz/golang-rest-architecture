@@ -12,8 +12,12 @@ type UserRegister struct {
 	Password string `json:"password" validate:"required,min=8"`
 }
 
-type UserUpdate struct {
+type UpdateUser struct {
 	Name  *string `json:"name,omitempty"`
 	Email *string `json:"email,omitempty" validate:"omitempty,email"`
 	Photo *string `json:"photo,omitempty"`
+}
+
+type UserUpdateNew struct {
+	Name *int `json:"id,omitempty"`
 }

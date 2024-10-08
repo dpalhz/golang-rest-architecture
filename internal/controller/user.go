@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"simulation/internal/controller/utils" // Import the utils package
-	request "simulation/internal/model/request"
+	"simulation/internal/controller/utils"
+	"simulation/internal/model/request"
 	"simulation/internal/services"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,7 +18,7 @@ func NewUserController(userService *services.UserService) *UserController {
 	}
 }
 
-func (uc *UserController) RegisterUserHandler(c *fiber.Ctx) error {
+func (uc *UserController) UserRegisterHandler(c *fiber.Ctx) error {
 	dto := new(request.UserRegister)
 
 	if err := c.BodyParser(dto); err != nil {
@@ -33,7 +33,7 @@ func (uc *UserController) RegisterUserHandler(c *fiber.Ctx) error {
 	return utils.CreateResponse(c, fiber.StatusCreated, true, "User registered successfully", response)
 }
 
-func (uc *UserController) LoginUserHandler(c *fiber.Ctx) error {
+func (uc *UserController) UserLoginHandler(c *fiber.Ctx) error {
 	dto := new(request.UserLogin)
 
 	// Parse body
@@ -49,8 +49,8 @@ func (uc *UserController) LoginUserHandler(c *fiber.Ctx) error {
 	return utils.CreateResponse(c, fiber.StatusOK, true, "Login successful", response)
 }
 
-func (uc *UserController) UpdateUserHandler(c *fiber.Ctx) error {
-	dto := new(request.UserUpdate)
+func (uc *UserController) UserUpdateHandler(c *fiber.Ctx) error {
+	dto := new(request.UpdateUser)
 
 	userID, err := c.ParamsInt("id")
 	if err != nil {
@@ -69,7 +69,7 @@ func (uc *UserController) UpdateUserHandler(c *fiber.Ctx) error {
 	return utils.CreateResponse(c, fiber.StatusOK, true, "User updated successfully", response)
 }
 
-func (uc *UserController) DeleteUserHandler(c *fiber.Ctx) error {
+func (uc *UserController) UserDeleteHandler(c *fiber.Ctx) error {
 	userID, err := c.ParamsInt("id")
 	if err != nil {
 		return utils.CreateResponse(c, fiber.StatusBadRequest, false, "Invalid user ID", nil)
@@ -83,7 +83,7 @@ func (uc *UserController) DeleteUserHandler(c *fiber.Ctx) error {
 }
 
 
-func (uc *UserController) GetUserProfileHandler(c *fiber.Ctx) error {
+func (uc *UserController) ProfileUserHandler(c *fiber.Ctx) error {
 	// Dapatkan user ID dari parameter URL
 	userID, err := c.ParamsInt("id")
 	if err != nil || userID <= 0 {

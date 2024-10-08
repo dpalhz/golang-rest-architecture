@@ -19,6 +19,6 @@ func AuthRoutes(api fiber.Router, db *gorm.DB, rd *config.RedisClient) {
 	authController := controller.NewAuthController(authService)
 
 	authRoutes := api.Group("/auth")
-	authRoutes.Post("/login", authController.Login)
-	authRoutes.Post("/logout", authMiddleware, authController.Logout)
+	authRoutes.Post("/login", authController.LoginHandler)
+	authRoutes.Post("/logout", authMiddleware, authController.LogoutHandler)
 }

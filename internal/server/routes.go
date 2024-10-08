@@ -13,8 +13,9 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	api.Get("/", s.HelloWorldHandler)
 	api.Get("/db/health", s.healthHandler)
 
-	routes.UserRoutes(api, s.db.GetDB())  
-	routes.AuthRoutes(api, s.db.GetDB(), &s.redis)	
+	routes.UserRoutes(api, s.DB.GetDB())  
+	routes.BlogRoutes(api, s.DB.GetDB(), &s.Redis)  
+	routes.AuthRoutes(api, s.DB.GetDB(), &s.Redis)	
 }
 
 
@@ -27,5 +28,5 @@ func (s *FiberServer) HelloWorldHandler(c *fiber.Ctx) error {
 }
 
 func (s *FiberServer) healthHandler(c *fiber.Ctx) error {
-	return c.JSON(s.db.Health())
+	return c.JSON(s.DB.Health())
 }

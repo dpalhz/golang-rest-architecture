@@ -23,3 +23,4 @@ func (r *UserRepository) FindByUsername(user *entity.User, username string) erro
 func (r *UserRepository) FindByEmail(user *entity.User, email string) error {
 	return r.DB.Where("email = ?", email).Take(user).Error
 }
+

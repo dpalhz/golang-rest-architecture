@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"simulation/internal/entity"
 	"strconv"
 	"time"
 
@@ -40,8 +39,7 @@ var (
 	dbInstance *gormInstance
 )
 
-// NewGorm creates a new Gorm instance with a GORM connection.
-// It reuses the connection if it's already established.
+
 func NewGorm() Gorm {
 	// Reuse Connection
 	if dbInstance != nil {
@@ -59,11 +57,7 @@ func NewGorm() Gorm {
 		log.Fatal("failed to connect database:", err)
 	}
 
-	// **Perform migration for your entities**
-    err = db.AutoMigrate(&entity.User{})  // Migrasi tabel User
-    if err != nil {
-        log.Fatalf("failed to migrate User entity: %v", err)
-    }
+	MigrateEntities(db)
 
 	dbInstance = &gormInstance{
 		db: db,

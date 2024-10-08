@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"os/signal"
+
+	// "simulation/internal/config"
 	"simulation/internal/server"
 	"strconv"
 	"syscall"
@@ -38,6 +40,10 @@ func gracefulShutdown(fiberServer *server.FiberServer) {
 func main() {
 
 	server := server.New()
+
+	// if err := config.SeedDatabase(server.DB.GetDB()); err != nil {
+	// 	log.Fatalf("Failed to seed database: %v", err)
+	// }
 
 	server.RegisterFiberRoutes()
 	go func() {

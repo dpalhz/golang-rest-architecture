@@ -1,28 +1,37 @@
 package server
 
 import (
-	"github.com/gofiber/fiber/v2"
-
 	"simulation/internal/config"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type FiberServer struct {
 	*fiber.App
 
-	db config.Gorm
-	redis config.RedisClient
+	DB config.Gorm
+	Redis config.RedisClient
 }
 
 func New() *FiberServer {
 	server := &FiberServer{
 		App: fiber.New(fiber.Config{
+			// Prefork: true,
 			ServerHeader: "simulation",
 			AppName:      "simulation",
 		}),
 
-		db: config.NewGorm(),
-		redis: *config.NewRedisClient(),
+		DB: config.NewGorm(),
+		Redis: *config.NewRedisClient(),
 	}
+
+	server.Use(cors.New(cors.Config{
+		AllowOrigins: "https://yourdomain.com, https://anotherdomain.com",
+		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowMethods: "GET, POST, PUT, DELETE",
+	}))
+	
 
 	return server
 }

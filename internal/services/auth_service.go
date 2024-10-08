@@ -32,7 +32,7 @@ func NewAuthService(userRepo *repository.UserRepository, redisClient *config.Red
 	}
 }
 
-func (s *AuthService) UserAuthentication(dto *request.UserLogin) (*response.UserLogin, error) {
+func (s *AuthService) ValidateUser(dto *request.UserLogin) (*response.UserLogin, error) {
 	if err := s.Validator.Struct(dto); err != nil {
 		return nil, err
 	}
