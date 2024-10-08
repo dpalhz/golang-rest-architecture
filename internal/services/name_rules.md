@@ -1,103 +1,103 @@
-Berikut prinsip-prinsip umum yang dapat diikuti untuk memberi nama method yang baik:
+Here’s the English version of the general principles for naming methods effectively:
 
-### 1. **Gunakan Kata Kerja yang Jelas**
+### 1. **Use Clear Verbs**
 
-Method umumnya melakukan aksi, jadi nama method harus diawali dengan kata kerja yang mencerminkan apa yang dilakukan method tersebut.
+Methods typically perform actions, so their names should begin with a verb that clearly reflects what the method does.
 
-- **Contoh:**
-  - `CreateUser()`: Untuk membuat pengguna baru.
-  - `UpdateOrderStatus()`: Untuk memperbarui status pesanan.
-  - `DeleteBlogPost()`: Untuk menghapus post blog.
+- **Examples:**
+  - `CreateUser()`: For creating a new user.
+  - `UpdateOrderStatus()`: For updating the status of an order.
+  - `DeleteBlogPost()`: For deleting a blog post.
 
-### 2. **Nama Method Harus Spesifik dan Deskriptif**
+### 2. **Method Names Should Be Specific and Descriptive**
 
-Nama method harus cukup deskriptif sehingga orang yang membaca kode bisa langsung mengerti apa yang dilakukan method tersebut tanpa melihat implementasinya.
+The method name should be descriptive enough so that someone reading the code can easily understand what the method does without needing to look at the implementation.
 
-- **Contoh Baik:**
-  - `FindUserByEmail()`: Mencari pengguna berdasarkan email.
-  - `SendWelcomeEmail()`: Mengirim email selamat datang.
-- **Contoh Buruk:**
-  - `DoAction()`: Terlalu generik dan tidak jelas.
+- **Good Example:**
+  - `FindUserByEmail()`: Finds a user based on their email.
+  - `SendWelcomeEmail()`: Sends a welcome email.
+- **Bad Example:**
+  - `DoAction()`: Too generic and unclear.
 
-### 3. **Gunakan Bahasa yang Konsisten**
+### 3. **Maintain Consistent Naming Conventions**
 
-Jika sudah memilih kata tertentu untuk operasi tertentu, konsistenlah dengan pemakaian kata tersebut di seluruh codebase. Misalnya, jika menggunakan `Find` untuk mendapatkan data, gunakan kata ini di seluruh method yang sejenis.
+Once you choose a certain word for an operation, be consistent with its usage throughout the codebase. For example, if you use `Find` for retrieval operations, use the same term across all similar methods.
 
-- **Contoh:**
-  - `FindUserById()` → konsisten menggunakan "Find" untuk pencarian.
-  - `GetOrderDetails()` → konsisten menggunakan "Get" untuk pengambilan detail.
+- **Examples:**
+  - `FindUserById()` → consistent use of "Find" for lookup methods.
+  - `GetOrderDetails()` → consistent use of "Get" for retrieving details.
 
-### 4. **Singkat tetapi Informatif**
+### 4. **Keep It Short but Informative**
 
-Nama method harus singkat, tetapi cukup deskriptif untuk mengungkapkan tujuan method. Hindari penggunaan kata yang tidak perlu.
+Method names should be concise but still descriptive enough to convey their purpose. Avoid unnecessary words.
 
-- **Contoh Baik:**
-  - `CalculateTotalPrice()`: Ringkas, tetapi jelas.
-- **Contoh Buruk:**
-  - `DoTotalPriceCalculationForItemsInCart()`: Terlalu panjang dan bertele-tele.
+- **Good Example:**
+  - `CalculateTotalPrice()`: Short and clear.
+- **Bad Example:**
+  - `DoTotalPriceCalculationForItemsInCart()`: Too long and verbose.
 
-### 5. **Gunakan Nama Method yang Menggambarkan Return Type**
+### 5. **Use Method Names that Reflect the Return Type**
 
-Jika method mengembalikan nilai tertentu, namanya harus menunjukkan apa yang dikembalikan, bukan hanya aksinya.
+If the method returns a certain value, the name should indicate what is being returned, not just the action performed.
 
-- **Contoh Baik:**
-  - `GetUserEmail()`: Mengembalikan email pengguna.
-  - `FetchOrderList()`: Mengambil daftar pesanan.
-- **Contoh Buruk:**
-  - `GetData()`: Tidak jelas data apa yang diambil.
+- **Good Example:**
+  - `GetUserEmail()`: Returns a user's email.
+  - `FetchOrderList()`: Retrieves a list of orders.
+- **Bad Example:**
+  - `GetData()`: Too vague about what data is being retrieved.
 
-### 6. **Jangan Gunakan Kata "And"**
+### 6. **Avoid Using "And" in Method Names**
 
-Jika nama method mengandung kata "and", ini bisa jadi tanda bahwa method tersebut melakukan lebih dari satu hal. Sebaiknya pisahkan method tersebut ke dalam beberapa method yang lebih spesifik.
+If a method name contains "and," it might indicate that the method is doing more than one thing. It's better to split it into multiple, more specific methods.
 
-- **Contoh Buruk:**
-  - `SaveAndNotifyUser()`: Method ini mungkin harus dibagi menjadi `SaveUser()` dan `NotifyUser()`.
+- **Bad Example:**
+  - `SaveAndNotifyUser()`: This should likely be split into `SaveUser()` and `NotifyUser()`.
 
-### 7. **Gunakan Konvensi Nama yang Umum dan Dikenal**
+### 7. **Use Well-Known Naming Conventions**
 
-Gunakan konvensi penamaan yang sudah dikenal dalam komunitas pengembang. Misalnya, untuk operasi CRUD (Create, Read, Update, Delete), gunakan kata-kata standar seperti:
+Follow established naming conventions that are commonly used in the developer community. For example, in CRUD operations (Create, Read, Update, Delete), use standard words like:
 
-- `Create`: Untuk membuat resource baru.
-- `Get` atau `Find`: Untuk membaca atau mengambil resource.
-- `Update`: Untuk memperbarui resource yang sudah ada.
-- `Delete`: Untuk menghapus resource.
+- `Create`: For creating a new resource.
+- `Get` or `Find`: For retrieving or reading data.
+- `Update`: For updating existing data.
+- `Delete`: For removing data.
 
-- **Contoh:**
-  - `CreateBlogPost()`: Membuat post baru.
-  - `GetUserById()`: Mengambil data pengguna berdasarkan ID.
-  - `UpdateProductInfo()`: Memperbarui informasi produk.
-  - `DeleteComment()`: Menghapus komentar.
+- **Examples:**
+  - `CreateBlogPost()`: For creating a new blog post.
+  - `GetUserById()`: For retrieving a user by their ID.
+  - `UpdateProductInfo()`: For updating product information.
+  - `DeleteComment()`: For deleting a comment.
 
-### 8. **Ikuti Pola Asynchronous Jika Method Menggunakan Asynchronous Calls**
+### 8. **Follow Asynchronous Naming Patterns**
 
-Jika method bekerja secara asynchronous, tambahkan suffix yang menunjukkan bahwa method tersebut asynchronous, misalnya `Async` atau `Promise`.
+If a method performs asynchronous operations, append a suffix that indicates the method is asynchronous, such as `Async` or `Promise`.
 
-- **Contoh:**
-  - `SendEmailAsync()`: Untuk method asynchronous yang mengirim email.
-  - `FetchDataAsync()`: Untuk mengambil data secara asynchronous.
+- **Examples:**
+  - `SendEmailAsync()`: For asynchronously sending an email.
+  - `FetchDataAsync()`: For asynchronously fetching data.
 
-### 9. **Gunakan Nama Method yang Menggambarkan Proses Bisnis**
+### 9. **Use Method Names that Reflect Business Processes**
 
-Jika method tersebut berhubungan dengan proses bisnis, nama method harus mencerminkan **domain bisnis** tersebut.
+If the method relates to a specific business process, its name should reflect that **business domain**.
 
-- **Contoh:**
-  - `ProcessPayment()`: Untuk memproses pembayaran.
-  - `CancelOrder()`: Untuk membatalkan pesanan.
-  - `ApproveTransaction()`: Untuk menyetujui transaksi.
+- **Examples:**
+  - `ProcessPayment()`: For processing a payment.
+  - `CancelOrder()`: For canceling an order.
+  - `ApproveTransaction()`: For approving a transaction.
 
-### Contoh Penamaan Method yang Baik:
+### Examples of Good Method Names:
 
-- `AddUser()`: Menambahkan pengguna.
-- `UpdateUserProfile()`: Memperbarui profil pengguna.
-- `GetProductByID()`: Mengambil produk berdasarkan ID.
-- `SendNotification()`: Mengirim notifikasi.
-- `ProcessRefund()`: Memproses pengembalian dana.
+- `AddUser()`: Adds a user.
+- `UpdateUserProfile()`: Updates a user's profile.
+- `GetProductByID()`: Retrieves a product by its ID.
+- `SendNotification()`: Sends a notification.
+- `ProcessRefund()`: Processes a refund.
 
-### Kesimpulan:
+### Conclusion:
 
-- **Gunakan kata kerja** yang jelas dan konsisten dengan operasi yang dilakukan.
-- Pastikan nama method **spesifik dan deskriptif**.
-- Hindari penamaan yang terlalu **generik** atau ambigu.
-- **Pisahkan** method yang melakukan banyak tugas menjadi beberapa method yang lebih spesifik.
+- **Use clear verbs** that describe the operation being performed.
+- Ensure method names are **specific and descriptive**.
+- Avoid overly **generic or ambiguous** naming.
+- **Split methods** that perform multiple tasks into more specific methods.
 
-Dengan mengikuti prinsip-prinsip ini, nama method akan lebih jelas, mudah dipahami, dan mencerminkan fungsinya dalam konteks bisnis.
+By following these principles, method names will be clearer, more understandable, and accurately reflect their functionality within the business context.
