@@ -13,6 +13,7 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	api.Get("/db/health", s.healthHandler)
 
 	routes.UserRoutes(api, s.DB.GetDB())  
+	routes.AnalyticRoutes(api, s.DB2.GetDB())
 	routes.BlogRoutes(api, s.DB.GetDB(), &s.Redis)  
 	routes.AuthRoutes(api, s.DB.GetDB(), &s.Redis)	
 }

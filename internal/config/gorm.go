@@ -16,13 +16,8 @@ import (
 
 // Gorm represents a struct that interacts with a database using GORM.
 type Gorm interface {
-	// Health returns a map of health status information.
-	// The keys and values in the map are service-specific.
 	GetDB() *gorm.DB
 	Health() map[string]string
-
-	// Close terminates the database connection.
-	// It returns an error if the connection cannot be closed.
 	Close() error
 }
 
@@ -31,44 +26,69 @@ type gormInstance struct {
 }
 
 var (
-	database   = os.Getenv("DB_DATABASE")
-	password   = os.Getenv("DB_PASSWORD")
-	username   = os.Getenv("DB_USERNAME")
-	port       = os.Getenv("DB_PORT")
-	host       = os.Getenv("DB_HOST")
-	schema     = os.Getenv("DB_SCHEMA")
-	dbInstance *gormInstance
+	// Environment variables for the first database
+	dbHost1     = os.Getenv("DB_HOST")
+	dbUsername1 = os.Getenv("DB_USERNAME")
+	dbPassword1 = os.Getenv("DB_PASSWORD")
+	dbPort1     = os.Getenv("DB_PORT")
+	dbSchema1   = os.Getenv("DB_SCHEMA")
+	dbName1     = os.Getenv("DB_DATABASE")
+	dbName2     = os.Getenv("DB_DATABASE2")
+
 )
 
+var (
+	dbInstance1 *gormInstance
+	dbInstance2 *gormInstance
+)
 
-func NewGorm() Gorm {
-	// Reuse Connection
-	if dbInstance != nil {
-		return dbInstance
+// NewGorm creates and returns two Gorm instances for the databases.
+func NewGorm() (Gorm, Gorm) {
+	if dbInstance1 == nil {
+		dbInstance1 = createGormInstance(
+			dbHost1,
+			dbUsername1,
+			dbPassword1,
+			dbName1,
+			dbPort1,
+			dbSchema1,
+		)
+		MigrateEntitiesDB1(dbInstance1.GetDB()) 
 	}
 
+	if dbInstance2 == nil {
+		dbInstance2 = createGormInstance(
+			dbHost1,
+			dbUsername1,
+			dbPassword1,
+			dbName2,
+			dbPort1,
+			dbSchema1,
+		)
+		MigrateEntitiesDB2(dbInstance2.GetDB()) 
+	}
+
+	return dbInstance1, dbInstance2
+}
+
+// createGormInstance handles the creation of a Gorm instance.
+func createGormInstance(host, username, password, database, port, schema string) *gormInstance {
 	connStr := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable search_path=%s",
 		host, username, password, database, port, schema)
 
-	// GORM with PostgreSQL driver
+	fmt.Println(connStr)
+
 	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info), // Adjust log level as needed
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
-		log.Fatal("failed to connect database:", err)
+		log.Fatal("failed to connect to database:", err)
 	}
 
-	MigrateEntities(db)
-
-	dbInstance = &gormInstance{
-		db: db,
-	}
-
-	return dbInstance
+	return &gormInstance{db: db}
 }
 
-// Health checks the health of the database connection by pinging the database.
-// It returns a map with keys indicating various health statistics.
+
 func (g *gormInstance) Health() map[string]string {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
@@ -127,15 +147,12 @@ func (g *gormInstance) Health() map[string]string {
 }
 
 // Close closes the database connection.
-// It logs a message indicating the disconnection from the specific database.
-// If the connection is successfully closed, it returns nil.
-// If an error occurs while closing the connection, it returns the error.
 func (g *gormInstance) Close() error {
 	sqlDB, err := g.db.DB()
 	if err != nil {
 		return fmt.Errorf("failed to get database object: %v", err)
 	}
-	log.Printf("Disconnected from database: %s", database)
+	log.Printf("Disconnected from database")
 	return sqlDB.Close()
 }
 
@@ -144,25 +161,36 @@ func (g *gormInstance) GetDB() *gorm.DB {
 	return g.db
 }
 
+func MigrateEntitiesDB1(db *gorm.DB) {
+	entities := []interface{}{
+		&entity.User{},
+		&entity.Blog{},
+		&entity.Admin{},
+		&entity.Category{},
+		&entity.Tag{},
+	}
+
+	migrateEntities(db, entities)
+}
 
 
-func MigrateEntities(db *gorm.DB) {
-    // List of entities to migrate
-    entities := []interface{}{
-        &entity.User{},
-        &entity.Admin{},
-        &entity.Blog{},
-        &entity.Category{},
-        &entity.Tag{},
-    }
+func MigrateEntitiesDB2(db *gorm.DB) {
+	// List of entities specific to database 2
+	entities := []interface{}{
+		&entity.Analytic{},
+	}
 
-    // Loop through each entity and migrate it
-    for _, entity := range entities {
-        err := db.AutoMigrate(entity)
-        if err != nil {
-            log.Fatalf("failed to migrate entity %T: %v", entity, err)
-        } else {
-            log.Printf("Migrated entity %T successfully", entity)
-        }
-    }
+	migrateEntities(db, entities)
+}
+
+
+func migrateEntities(db *gorm.DB, entities []interface{}) {
+	for _, entity := range entities {
+		err := db.AutoMigrate(entity)
+		if err != nil {
+			log.Fatalf("failed to migrate entity %T: %v", entity, err)
+		} else {
+			log.Printf("Migrated entity %T successfully", entity)
+		}
+	}
 }

@@ -62,3 +62,18 @@ func (bc *BlogController) FilterBlogsHandler(c *fiber.Ctx) error {
 
 	return utils.CreateResponse(c, fiber.StatusOK, true, "Blogs filtered successfully", blogs)
 }
+
+
+func (bc *BlogController) GetBlogDetailHandler(c *fiber.Ctx) error {
+	blogID, err := c.ParamsInt("id")
+	if err != nil {
+		return utils.CreateResponse(c, fiber.StatusBadRequest, false, "Invalid blog ID", nil)
+	}
+
+	blogDetail, err := bc.blogService.GetBlogDetail(uint(blogID))
+	if err != nil {
+		return utils.CreateResponse(c, fiber.StatusInternalServerError, false, "Failed to retrieve blog detail", nil)
+	}
+
+	return utils.CreateResponse(c, fiber.StatusOK, true, "Blog detail retrieved successfully", blogDetail)
+}

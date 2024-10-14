@@ -11,18 +11,21 @@ type FiberServer struct {
 	*fiber.App
 
 	DB config.Gorm
+	DB2 config.Gorm
 	Redis config.RedisClient
 }
 
 func New() *FiberServer {
+	DB1, DB2 := config.NewGorm()
 	server := &FiberServer{
 		App: fiber.New(fiber.Config{
 			// Prefork: true,
 			ServerHeader: "simulation",
 			AppName:      "simulation",
 		}),
-
-		DB: config.NewGorm(),
+		
+		DB: DB1,
+		DB2: DB2,
 		Redis: *config.NewRedisClient(),
 	}
 

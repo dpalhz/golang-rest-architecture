@@ -1,0 +1,10 @@
+Admin: user0, Email: user378@example.com, Password: $2a$10$CW2S0mF9ePOEVA/v9p6cbu5FOdoUH7/5xXrjD6j2Bkw66O4c6gS4K
+Admin: user1, Email: user10@example.com, Password: $2a$10$HhjvrWnHP/lVUZ0IroLZyuMmaRirS8Y6UTtK59gU/P3TWlv7MJ2aG
+Admin: user2, Email: user613@example.com, Password: $2a$10$pS1xwgO.LANneBEz2OIum.4fOlubCbbDy4v3G0jlis6VPQrWKowom
+User: user3, Email: user608@example.com, Password: $2a$10$OF8ayj2gdR94GPLvvJ3qDuMuuZgVTV0VuTEDVYlnG/jxWKy.1gnsi
+User: user4, Email: user714@example.com, Password: $2a$10$N9XCoBbVCKPGqwCgEbfCPuDAsVVwzd4yJ6ZxbcZf1jLR4yejJ.cTW
+User: user5, Email: user134@example.com, Password: $2a$10$oVOqIEeFOOJoKm4xYD0l6e3KgblbQTEOzBfhwvchJNzaRYhDK911u
+User: user6, Email: user423@example.com, Password: $2a$10$ayyaWh/17CEJ/oJ1K7eIb.uJbUo4dDoPXS0x6PQ3Tuhn4bSJYjeqi
+User: user7, Email: user948@example.com, Password: $2a$10$40yEjLSjILSgBrT3lbzaW.zhGStBkWQTNC/plFZqpWPWp1RHY9aLG
+User: user8, Email: user759@example.com, Password: $2a$10$pOwx2ZhWmMZ8vykt09Um5Os83gmGpnnKYxMwji/6Ho7cacpmPlOfa
+User: user9, Email: user215@example.com, Password: $2a$10$CLgbqIrqb1p/v6KXwho92epUj42OXJUxGgDUIXC8WUreHs1Au/DwK

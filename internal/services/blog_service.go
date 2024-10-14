@@ -117,3 +117,13 @@ func (s *BlogService) FilterBlogs(dto *request.BlogFilter) ([]*response.Blog, er
 
     return blogResponses, nil
 }
+
+
+func (s *BlogService) GetBlogDetail(id uint) (*response.BlogDetail, error) {
+	var blog entity.Blog
+	err := s.BlogRepo.FindById(&blog, id)
+	if err != nil {
+		return nil, err
+	}
+	return converter.ConvertBlogToBlogDetailResponse(&blog), nil
+}
